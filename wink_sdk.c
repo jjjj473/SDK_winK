@@ -189,6 +189,297 @@ int wink_run_with_env(const char *prefix, const char *exe, const char *args, con
     return system(command);
 }
 
+/* Install .NET runtime using winetricks */
+int wink_install_dotnet(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q dotnet48", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q dotnet48");
+    return system(command);
+}
+
+/* Install Visual C++ runtimes */
+int wink_install_vcrun(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q vcrun2019", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q vcrun2019");
+    return system(command);
+}
+
+/* Set the Windows version for the prefix */
+int wink_set_windows_version(const char *prefix, const char *version)
+{
+    char command[256];
+    if (!version)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q win%s", prefix, version);
+    else
+        snprintf(command, sizeof(command), "winetricks -q win%s", version);
+    return system(command);
+}
+
+/* Backup registry to a file */
+int wink_backup_registry(const char *prefix, const char *output)
+{
+    char command[512];
+    if (!output)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s regedit /E %s", prefix, output);
+    else
+        snprintf(command, sizeof(command), "regedit /E %s", output);
+    return system(command);
+}
+
+/* Restore registry from a file */
+int wink_restore_registry(const char *prefix, const char *input)
+{
+    char command[512];
+    if (!input)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s regedit %s", prefix, input);
+    else
+        snprintf(command, sizeof(command), "regedit %s", input);
+    return system(command);
+}
+
+/* Install Gallium Nine for improved D3D9 performance */
+int wink_install_gallium_nine(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q galliumnine", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q galliumnine");
+    return system(command);
+}
+
+/* Enable esync in the prefix */
+int wink_setup_esync(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q settings esync=enabled", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q settings esync=enabled");
+    return system(command);
+}
+
+/* Enable fsync in the prefix */
+int wink_setup_fsync(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q settings fsync=enabled", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q settings fsync=enabled");
+    return system(command);
+}
+
+/* Install common fonts */
+int wink_install_fonts(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q corefonts", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q corefonts");
+    return system(command);
+}
+
+/* Enable virtual desktop mode */
+int wink_enable_virtual_desktop(const char *prefix, int width, int height)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q vd=%dx%d", prefix, width, height);
+    else
+        snprintf(command, sizeof(command), "winetricks -q vd=%dx%d", width, height);
+    return system(command);
+}
+
+/* Disable virtual desktop mode */
+int wink_disable_virtual_desktop(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q vd=off", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q vd=off");
+    return system(command);
+}
+
+/* Run Wine uninstaller */
+int wink_run_uninstaller(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s wine uninstaller", prefix);
+    else
+        snprintf(command, sizeof(command), "wine uninstaller");
+    return system(command);
+}
+
+/* Set a DLL override to native */
+int wink_install_override_dll(const char *prefix, const char *dll)
+{
+    char command[512];
+    if (!dll)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q dlloverride=%s=n", prefix, dll);
+    else
+        snprintf(command, sizeof(command), "winetricks -q dlloverride=%s=n", dll);
+    return system(command);
+}
+
+/* Remove a DLL override */
+int wink_remove_override_dll(const char *prefix, const char *dll)
+{
+    char command[512];
+    if (!dll)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q dlloverride=%s=", prefix, dll);
+    else
+        snprintf(command, sizeof(command), "winetricks -q dlloverride=%s=", dll);
+    return system(command);
+}
+
+/* Execute a configuration script inside the prefix */
+int wink_run_config_script(const char *prefix, const char *script)
+{
+    char command[512];
+    if (!script)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s bash %s", prefix, script);
+    else
+        snprintf(command, sizeof(command), "bash %s", script);
+    return system(command);
+}
+
+/* Clean cached files in the prefix */
+int wink_clean_cache(const char *prefix)
+{
+    char command[512];
+    if (!prefix)
+        return 1;
+    snprintf(command, sizeof(command), "rm -rf %s/drive_c/windows/temp/*", prefix);
+    return system(command);
+}
+
+/* Extract an MSI installer */
+int wink_extract_msi(const char *prefix, const char *msi)
+{
+    char command[512];
+    if (!msi)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s msiexec /a %s /qb TARGETDIR=%s/msi_extract", prefix, msi, prefix);
+    else
+        snprintf(command, sizeof(command), "msiexec /a %s /qb TARGETDIR=./msi_extract", msi);
+    return system(command);
+}
+
+/* Register a DLL with regsvr32 */
+int wink_run_regsvr(const char *prefix, const char *dll)
+{
+    char command[512];
+    if (!dll)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s regsvr32 %s", prefix, dll);
+    else
+        snprintf(command, sizeof(command), "regsvr32 %s", dll);
+    return system(command);
+}
+
+/* Limit CPU cores for Wine processes */
+int wink_set_cpu_cores(const char *prefix, int cores)
+{
+    char command[512];
+    if (cores <= 0)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "taskset -c 0-%d WINEPREFIX=%s wineserver -w", cores - 1, prefix);
+    else
+        snprintf(command, sizeof(command), "taskset -c 0-%d wineserver -w", cores - 1);
+    return system(command);
+}
+
+/* Enable PBA */
+int wink_enable_pba(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q settings pba=enabled", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q settings pba=enabled");
+    return system(command);
+}
+
+/* Disable PBA */
+int wink_disable_pba(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winetricks -q settings pba=disabled", prefix);
+    else
+        snprintf(command, sizeof(command), "winetricks -q settings pba=disabled");
+    return system(command);
+}
+
+/* Launch winecfg for the prefix */
+int wink_run_winecfg(const char *prefix)
+{
+    char command[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s winecfg", prefix);
+    else
+        snprintf(command, sizeof(command), "winecfg");
+    return system(command);
+}
+
+/* Open a directory in Wine explorer */
+int wink_run_explorer(const char *prefix, const char *path)
+{
+    char command[512];
+    if (!path)
+        return 1;
+    if (prefix && strlen(prefix) > 0)
+        snprintf(command, sizeof(command), "WINEPREFIX=%s wine explorer %s", prefix, path);
+    else
+        snprintf(command, sizeof(command), "wine explorer %s", path);
+    return system(command);
+}
+
+/* Create a simple desktop shortcut */
+int wink_create_desktop_shortcut(const char *prefix, const char *name, const char *exe)
+{
+    if (!name || !exe)
+        return 1;
+    FILE *fp = fopen(name, "w");
+    if (!fp)
+        return 1;
+    fprintf(fp, "[Desktop Entry]\n");
+    fprintf(fp, "Type=Application\n");
+    fprintf(fp, "Name=%s\n", name);
+    if (prefix && strlen(prefix) > 0)
+        fprintf(fp, "Exec=env WINEPREFIX=%s wine %s\n", prefix, exe);
+    else
+        fprintf(fp, "Exec=wine %s\n", exe);
+    fclose(fp);
+    return 0;
+}
+
 /* Example main demonstrating usage */
 #ifdef WINK_SDK_DEMO
 int main(int argc, char **argv)
