@@ -1,6 +1,11 @@
 #!/bin/sh
 # Update SDK to the latest version and rebuild
 set -e
+# Determine the repository root relative to this script
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_DIR"
+
 if [ ! -d .git ]; then
     echo "No git repository found" >&2
     exit 1

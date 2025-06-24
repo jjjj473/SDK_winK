@@ -18,7 +18,8 @@ This produces `libwink.a` which can be linked with your projects.
 Run `scripts/update_sdk.sh` to automatically pull the latest version of the SDK
 from the `codex/build-sdk-for-wink-on-arch-linux` branch of the
 `jjjj473/SDK_winK` repository and rebuild the library. The script shows a small
-Zenity dialog asking if you want to update. You can also call
+Zenity dialog asking if you want to update. It automatically locates the
+repository root so you can run it from any directory. You can also call
 `wink_prompt_update(NULL)` from your program to display the same dialog and
 update the SDK at runtime using the same branch.
 
