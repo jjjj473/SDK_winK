@@ -44,7 +44,7 @@ SDK can wrap Wine commands. More robust features will arrive in later versions.
 
 ## Available helpers
 
-The SDK exposes many helpers for common Wine tasks (over two hundred in total). Some examples include:
+The SDK exposes many helpers for common Wine tasks (over three hundred in total). Some examples include:
 
 - `wink_install_mono()` and `wink_install_gecko()` install Mono and Gecko via winetricks.
 - `wink_run_winetricks()` executes custom winetricks commands.
@@ -93,4 +93,6 @@ The SDK exposes many helpers for common Wine tasks (over two hundred in total). 
 - `wink_install_vlc()` installs the VLC media player.
 - `wink_install_utorrent()` installs µTorrent.
 - `wink_install_office2013pro()` installs Microsoft Office 2013.
+- Placeholder prefix helpers like `wink_prefix1()` through `wink_prefix100()`
+  demonstrate custom winetricks verbs.
 - `wink_self_update()` pulls the latest SDK changes and rebuilds.
