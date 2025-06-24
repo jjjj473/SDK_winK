@@ -5,6 +5,14 @@
 extern "C" {
 #endif
 
+/* Error handling */
+const char *wink_last_error(void);
+int wink_last_error_code(void);
+int wink_error_count(void);
+const char *wink_error_at(int index);
+void wink_clear_errors(void);
+int wink_run_catch(int (*func)(void));
+
 /* Main SDK functions */
 int wink_setup(const char *prefix);
 int wink_run(const char *prefix, const char *exe, const char *args);
