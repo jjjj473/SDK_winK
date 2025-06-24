@@ -6,6 +6,18 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+/* Helper macro to create simple winetricks wrappers */
+#define WINK_SIMPLE_VERB(name, verb)                          \
+int wink_##name(const char *prefix)                          \
+{                                                            \
+    char cmd[256];                                           \
+    if (prefix && strlen(prefix) > 0)                        \
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s winetricks -q %s", prefix, verb); \
+    else                                                     \
+        snprintf(cmd, sizeof(cmd), "winetricks -q %s", verb); \
+    return system(cmd);                                      \
+}
+
 /* Initialize a Wine prefix. Returns 0 on success, non-zero on error. */
 int wink_setup(const char *prefix)
 {
@@ -478,6 +490,193 @@ int wink_create_desktop_shortcut(const char *prefix, const char *name, const cha
         fprintf(fp, "Exec=wine %s\n", exe);
     fclose(fp);
     return 0;
+}
+
+/* ------ Additional helper wrappers (60 total new tools) ------ */
+/* winetricks verbs */
+WINK_SIMPLE_VERB(install_dxvk, "dxvk")
+WINK_SIMPLE_VERB(install_openal, "openal")
+WINK_SIMPLE_VERB(install_quartz, "quartz")
+WINK_SIMPLE_VERB(install_msxml6, "msxml6")
+WINK_SIMPLE_VERB(install_physx, "physx")
+WINK_SIMPLE_VERB(install_xact, "xact")
+WINK_SIMPLE_VERB(install_directmusic, "dmusic")
+WINK_SIMPLE_VERB(install_d3dx9, "d3dx9")
+WINK_SIMPLE_VERB(install_d3dcompiler, "d3dcompiler_47")
+WINK_SIMPLE_VERB(install_wmp, "wmp9")
+WINK_SIMPLE_VERB(install_gstreamer, "gstreamer")
+WINK_SIMPLE_VERB(install_vkd3d, "vkd3d")
+WINK_SIMPLE_VERB(install_ffmpeg, "ffmpeg")
+WINK_SIMPLE_VERB(install_winhttp, "winhttp")
+WINK_SIMPLE_VERB(install_dotnet35, "dotnet35")
+WINK_SIMPLE_VERB(install_mfc, "mfc42")
+WINK_SIMPLE_VERB(install_gdiplus, "gdiplus")
+WINK_SIMPLE_VERB(install_msxml3, "msxml3")
+WINK_SIMPLE_VERB(install_msxml4, "msxml4")
+WINK_SIMPLE_VERB(install_vcrun6, "vcrun6")
+WINK_SIMPLE_VERB(install_vcrun2005, "vcrun2005")
+WINK_SIMPLE_VERB(install_vcrun2008, "vcrun2008")
+WINK_SIMPLE_VERB(install_vcrun2010, "vcrun2010")
+WINK_SIMPLE_VERB(install_vcrun2012, "vcrun2012")
+WINK_SIMPLE_VERB(install_vcrun2013, "vcrun2013")
+WINK_SIMPLE_VERB(install_vcrun2015, "vcrun2015")
+WINK_SIMPLE_VERB(install_directplay, "directplay")
+WINK_SIMPLE_VERB(install_dsound, "dsound")
+WINK_SIMPLE_VERB(install_devenum, "devenum")
+WINK_SIMPLE_VERB(install_shell32, "shell32")
+WINK_SIMPLE_VERB(install_control_panel, "controlpanel")
+WINK_SIMPLE_VERB(install_wininet, "wininet")
+WINK_SIMPLE_VERB(install_comctl32, "comctl32")
+WINK_SIMPLE_VERB(install_riched20, "riched20")
+WINK_SIMPLE_VERB(install_riched30, "riched30")
+WINK_SIMPLE_VERB(install_secur32, "secur32")
+WINK_SIMPLE_VERB(install_shlwapi, "shlwapi")
+WINK_SIMPLE_VERB(install_urlmon, "urlmon")
+WINK_SIMPLE_VERB(install_advapi32, "advapi32")
+WINK_SIMPLE_VERB(install_winspool, "winspool")
+WINK_SIMPLE_VERB(install_adobe_air, "adobeair")
+WINK_SIMPLE_VERB(install_flash, "flash")
+WINK_SIMPLE_VERB(install_chrome_frame, "chromeframe")
+WINK_SIMPLE_VERB(install_d3d11, "d3d11")
+WINK_SIMPLE_VERB(install_dotnet452, "dotnet452")
+WINK_SIMPLE_VERB(install_directx9, "directx9")
+WINK_SIMPLE_VERB(install_directx10, "directx10")
+WINK_SIMPLE_VERB(install_directx11, "directx11")
+WINK_SIMPLE_VERB(install_physx_legacy, "physxlegacy")
+
+/* manual wrappers */
+int wink_update_wine()
+{
+    return system("sudo pacman -Syu --noconfirm wine");
+}
+
+int wink_install_proton()
+{
+    return system("protonup -d ~/.steam/root/compatibilitytools.d -p GE-Proton");
+}
+
+int wink_update_dxvk(const char *prefix)
+{
+    char cmd[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s setup_dxvk.sh install --symlink", prefix);
+    else
+        snprintf(cmd, sizeof(cmd), "setup_dxvk.sh install --symlink");
+    return system(cmd);
+}
+
+int wink_list_processes()
+{
+    return system("ps -ef | grep wine");
+}
+
+int wink_terminate_process(const char *name)
+{
+    if (!name)
+        return 1;
+    char cmd[256];
+    snprintf(cmd, sizeof(cmd), "pkill -f %s", name);
+    return system(cmd);
+}
+
+int wink_install_game_msi(const char *prefix, const char *msi)
+{
+    if (!msi)
+        return 1;
+    char cmd[512];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s msiexec /i %s /qb", prefix, msi);
+    else
+        snprintf(cmd, sizeof(cmd), "msiexec /i %s /qb", msi);
+    return system(cmd);
+}
+
+int wink_run_control_panel(const char *prefix)
+{
+    char cmd[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s wine control", prefix);
+    else
+        snprintf(cmd, sizeof(cmd), "wine control");
+    return system(cmd);
+}
+
+int wink_get_winepath(const char *unix_path, char *out, size_t len)
+{
+    if (!unix_path || !out || len == 0)
+        return 1;
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd), "winepath '%s'", unix_path);
+    FILE *fp = popen(cmd, "r");
+    if (!fp)
+        return 1;
+    if (!fgets(out, len, fp)) {
+        pclose(fp);
+        return 1;
+    }
+    out[strcspn(out, "\n")] = '\0';
+    pclose(fp);
+    return 0;
+}
+
+int wink_get_native_path(const char *win_path, char *out, size_t len)
+{
+    if (!win_path || !out || len == 0)
+        return 1;
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd), "winepath -u '%s'", win_path);
+    FILE *fp = popen(cmd, "r");
+    if (!fp)
+        return 1;
+    if (!fgets(out, len, fp)) {
+        pclose(fp);
+        return 1;
+    }
+    out[strcspn(out, "\n")] = '\0';
+    pclose(fp);
+    return 0;
+}
+
+int wink_run_cmd(const char *prefix, const char *command)
+{
+    if (!command)
+        return 1;
+    char cmd[512];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s wine cmd /c %s", prefix, command);
+    else
+        snprintf(cmd, sizeof(cmd), "wine cmd /c %s", command);
+    return system(cmd);
+}
+
+int wink_fix_wineprefix(const char *prefix)
+{
+    char cmd[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s winetricks --force setupapi", prefix);
+    else
+        snprintf(cmd, sizeof(cmd), "winetricks --force setupapi");
+    return system(cmd);
+}
+
+int wink_enable_hud(const char *prefix)
+{
+    char cmd[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s DXVK_HUD=1 winecfg", prefix);
+    else
+        snprintf(cmd, sizeof(cmd), "DXVK_HUD=1 winecfg");
+    return system(cmd);
+}
+
+int wink_disable_hud(const char *prefix)
+{
+    char cmd[256];
+    if (prefix && strlen(prefix) > 0)
+        snprintf(cmd, sizeof(cmd), "WINEPREFIX=%s DXVK_HUD= winecfg", prefix);
+    else
+        snprintf(cmd, sizeof(cmd), "DXVK_HUD= winecfg");
+    return system(cmd);
 }
 
 /* Example main demonstrating usage */

@@ -36,7 +36,7 @@ SDK can wrap Wine commands. More robust features will arrive in later versions.
 
 ## Available helpers
 
-The SDK exposes many helpers for common Wine tasks (over forty in total). Some examples include:
+The SDK exposes many helpers for common Wine tasks (over one hundred in total). Some examples include:
 
 - `wink_install_mono()` and `wink_install_gecko()` install Mono and Gecko via winetricks.
 - `wink_run_winetricks()` executes custom winetricks commands.
@@ -67,3 +67,16 @@ The SDK exposes many helpers for common Wine tasks (over forty in total). Some e
 - `wink_run_winecfg()` opens Wine configuration.
 - `wink_run_explorer()` opens paths via Wine explorer.
 - `wink_create_desktop_shortcut()` generates simple desktop shortcuts.
+- `wink_update_wine()` updates the system Wine package.
+- `wink_install_proton()` fetches a Proton GE build.
+- `wink_install_dxvk()` installs DXVK via winetricks.
+- `wink_update_dxvk()` updates DXVK inside a prefix.
+- `wink_list_processes()` lists running Wine processes.
+- `wink_terminate_process()` kills a given Wine process.
+- `wink_install_game_msi()` installs MSI games silently.
+- `wink_run_control_panel()` opens the Wine control panel.
+- `wink_get_winepath()` converts Unix paths to Windows format.
+- `wink_get_native_path()` converts Windows paths to Unix format.
+- `wink_run_cmd()` runs commands through `cmd /c`.
+- `wink_fix_wineprefix()` applies basic prefix fixes.
+- `wink_enable_hud()` and `wink_disable_hud()` toggle the DXVK HUD.
