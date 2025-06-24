@@ -665,6 +665,18 @@ int wink_update_dxvk(const char *prefix)
     return system(cmd);
 }
 
+/* Pull the latest SDK updates and rebuild */
+int wink_self_update(const char *repo_dir)
+{
+    const char *dir = repo_dir && strlen(repo_dir) > 0 ? repo_dir : ".";
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd), "git -C %s pull --ff-only", dir);
+    if (system(cmd) != 0)
+        return 1;
+    snprintf(cmd, sizeof(cmd), "make -C %s", dir);
+    return system(cmd);
+}
+
 int wink_list_processes()
 {
     return system("ps -ef | grep wine");

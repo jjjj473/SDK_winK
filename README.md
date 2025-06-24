@@ -12,6 +12,12 @@ make
 ```
 This produces `libwink.a` which can be linked with your projects.
 
+## Updating
+
+Run `scripts/update_sdk.sh` to automatically pull the latest version and rebuild
+the library. You can also call `wink_self_update(NULL)` from your program to
+update the SDK at runtime.
+
 ## Example
 
 ```c
@@ -85,3 +91,4 @@ The SDK exposes many helpers for common Wine tasks (over two hundred in total). 
 - `wink_install_vlc()` installs the VLC media player.
 - `wink_install_utorrent()` installs µTorrent.
 - `wink_install_office2013pro()` installs Microsoft Office 2013.
+- `wink_self_update()` pulls the latest SDK changes and rebuilds.
