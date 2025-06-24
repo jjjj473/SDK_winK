@@ -1,20 +1,35 @@
 # SDK_winK
 
-SDK winK is an experimental Arch Linux toolkit built on top of Wine. It focuses
-on launching Windows games and applications (including Roblox) from a Linux
-environment. The project aims to provide robust error handling, complex
-configuration support, and packaging helpers.
+SDK winK is a small C toolkit for managing Wine on Arch Linux. It aims to make
+it easy to run Windows games (including Roblox) and packages them with simple
+helpers. The entire SDK logic lives in **wink_sdk.c** with a companion
+**wink_errors.cpp** providing C++ error utilities.
 
-## Features
-- **Robust Wine integration**: Scripts and configuration examples for running Windows games on Arch Linux.
-- **Complex configuration**: Support for customizing Wine prefixes and game-specific tweaks.
-- **Packaging helpers**: Tools to bundle dependencies for easy redistribution.
+## Building
 
-## Usage
-1. Clone this repository.
-2. Run `scripts/setup_wine.sh` to initialize a Wine prefix.
-3. Use `python -m wink.cli --help` for additional commands and options.
+```sh
+make
+```
+This produces `libwink.a` which can be linked with your projects.
+
+## Example
+
+```c
+#include "wink_sdk.c" // single-file usage
+
+int main() {
+    wink_setup("/tmp/wink-prefix");
+    wink_run("/tmp/wink-prefix", "notepad.exe", NULL);
+    return 0;
+}
+```
+
+Compile with:
+
+```sh
+gcc example.c libwink.a -o example -ldl
+```
 
 ## Status
-The repository includes minimal scripts and a Python CLI for experimentation. More
-advanced features and packaging utilities are planned for future releases.
+The project is experimental and demonstrates how a lightweight single-file C
+SDK can wrap Wine commands. More robust features will arrive in later versions.
