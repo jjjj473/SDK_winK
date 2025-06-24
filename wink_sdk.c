@@ -737,6 +737,19 @@ int wink_self_update(const char *repo_dir)
     return system(cmd);
 }
 
+/* GUI helper that prompts the user to update the SDK */
+int wink_prompt_update(const char *repo_dir)
+{
+    /* Check for zenity to display a simple dialog */
+    if (system("command -v zenity > /dev/null 2>&1") != 0)
+        return wink_self_update(repo_dir); /* fallback to direct update */
+
+    int ret = system("zenity --question --text='Click Update to fetch the latest SDK for the best experience.' --ok-label=Update --cancel-label=Skip");
+    if (ret == 0)
+        return wink_self_update(repo_dir);
+    return ret == 1 ? 0 : ret;
+}
+
 int wink_list_processes()
 {
     return system("ps -ef | grep wine");

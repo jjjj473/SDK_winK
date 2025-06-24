@@ -16,9 +16,10 @@ This produces `libwink.a` which can be linked with your projects.
 
 Run `scripts/update_sdk.sh` to automatically pull the latest version of the SDK
 from the `codex/build-sdk-for-wink-on-arch-linux` branch of the
-`jjjj473/SDK_winK` repository and rebuild the library. You can also call
-`wink_self_update(NULL)` from your program to update the SDK at runtime using
-the same branch.
+`jjjj473/SDK_winK` repository and rebuild the library. The script shows a small
+Zenity dialog asking if you want to update. You can also call
+`wink_prompt_update(NULL)` from your program to display the same dialog and
+update the SDK at runtime using the same branch.
 
 ## Example
 
@@ -95,4 +96,5 @@ The SDK exposes many helpers for common Wine tasks (over two hundred fifty in to
 - `wink_install_office2013pro()` installs Microsoft Office 2013.
  - Additional helpers cover many more verbs such as `wink_install_dotnet20()`,
    `wink_install_vcrun2019()`, and `wink_install_d3dx9_43()`.
-- `wink_self_update()` pulls the latest SDK changes and rebuilds.
+ - `wink_self_update()` pulls the latest SDK changes and rebuilds.
+ - `wink_prompt_update()` shows a GUI dialog asking if you want to update, then runs `wink_self_update()`.
