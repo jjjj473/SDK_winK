@@ -669,10 +669,18 @@ int wink_update_dxvk(const char *prefix)
 int wink_self_update(const char *repo_dir)
 {
     const char *dir = repo_dir && strlen(repo_dir) > 0 ? repo_dir : ".";
+    const char *remote = "https://github.com/jjjj473/SDK_winK.git";
+    const char *branch = "codex/build-sdk-for-wink-on-arch-linux";
     char cmd[512];
-    snprintf(cmd, sizeof(cmd), "git -C %s pull --ff-only", dir);
+
+    snprintf(cmd, sizeof(cmd), "git -C %s fetch %s %s", dir, remote, branch);
     if (system(cmd) != 0)
         return 1;
+
+    snprintf(cmd, sizeof(cmd), "git -C %s reset --hard FETCH_HEAD", dir);
+    if (system(cmd) != 0)
+        return 1;
+
     snprintf(cmd, sizeof(cmd), "make -C %s", dir);
     return system(cmd);
 }

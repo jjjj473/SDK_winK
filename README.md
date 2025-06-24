@@ -14,9 +14,11 @@ This produces `libwink.a` which can be linked with your projects.
 
 ## Updating
 
-Run `scripts/update_sdk.sh` to automatically pull the latest version and rebuild
-the library. You can also call `wink_self_update(NULL)` from your program to
-update the SDK at runtime.
+Run `scripts/update_sdk.sh` to automatically pull the latest version of the SDK
+from the `codex/build-sdk-for-wink-on-arch-linux` branch of the
+`jjjj473/SDK_winK` repository and rebuild the library. You can also call
+`wink_self_update(NULL)` from your program to update the SDK at runtime using
+the same branch.
 
 ## Example
 
