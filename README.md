@@ -33,3 +33,18 @@ gcc example.c libwink.a -o example -ldl
 ## Status
 The project is experimental and demonstrates how a lightweight single-file C
 SDK can wrap Wine commands. More robust features will arrive in later versions.
+
+## Available helpers
+
+The SDK now exposes additional helpers for common Wine tasks:
+
+- `wink_install_mono()` and `wink_install_gecko()` install Mono and Gecko via winetricks.
+- `wink_run_winetricks()` executes custom winetricks commands.
+- `wink_set_registry()` imports registry files.
+- `wink_get_wine_version()` returns the Wine version string.
+- `wink_prefix_exists()` and `wink_delete_prefix()` manage prefix directories.
+- `wink_export_prefix()` and `wink_import_prefix()` package prefixes to archives.
+- `wink_kill_processes()` stops leftover Wine processes.
+- `wink_run_dxvk_setup()` installs DXVK.
+- `wink_cleanup_prefix()` removes temporary files.
+- `wink_run_with_env()` runs programs with custom environment variables.
